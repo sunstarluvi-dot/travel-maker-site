@@ -1,0 +1,7 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='750' viewBox='0 0 1200 750'>
+  <rect width='100%' height='100%' fill='#FFF3E0'/>
+  <circle cx='600' cy='320' r='110' fill='#BF360C' opacity='0.08'/>
+  <circle cx='480' cy='400' r='85' fill='#D84315' opacity='0.12'/>
+  <circle cx='720' cy='390' r='95' fill='#E64A19' opacity='0.1'/>
+  <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='64' fill='#BF360C' font-family='sans-serif' font-weight='700'>BEEF JERKY</text>
+</svg>

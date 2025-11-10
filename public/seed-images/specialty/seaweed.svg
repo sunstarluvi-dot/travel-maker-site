@@ -1,0 +1,7 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='750' viewBox='0 0 1200 750'>
+  <rect width='100%' height='100%' fill='#E8F5E9'/>
+  <circle cx='600' cy='300' r='120' fill='#1B5E20' opacity='0.1'/>
+  <circle cx='500' cy='400' r='80' fill='#2E7D32' opacity='0.15'/>
+  <circle cx='700' cy='380' r='90' fill='#388E3C' opacity='0.12'/>
+  <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='64' fill='#1B5E20' font-family='sans-serif' font-weight='700'>SEAWEED</text>
+</svg>
