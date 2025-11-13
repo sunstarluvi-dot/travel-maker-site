@@ -278,7 +278,7 @@ export default function CourseDetailPage() {
                     <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-[#FF6F42]/10 to-[#3A9CFD]/10 border border-[#FF6F42]/20">
                       <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm p-2">
                         <img
-                          src="/images/official_cert_icon.jpg"
+                          src="/brand/logo.jpg"
                           alt="Official Certification"
                           className="w-full h-full object-contain"
                         />

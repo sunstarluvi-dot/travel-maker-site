@@ -125,7 +125,7 @@ export default function ChatbotPanel() {
         <div className="fixed bottom-24 right-5 z-[999] w-[380px] max-w-[92vw] overflow-hidden rounded-2xl bg-white shadow-2xl">
           {/* Header */}
           <div className="flex items-center justify-between bg-gradient-to-r from-[#FF6F42] to-[#3A9CFD] px-4 py-3 text-white">
-            <div className="font-bold">티미 - TRAVEL MAKER 도우미</div>
+            <div className="font-bold">티미 트래블메이커 AI 지원봇</div>
             <button onClick={() => setOpen(false)} aria-label="닫기" className="text-xl hover:opacity-80">
               ✕
             </button>

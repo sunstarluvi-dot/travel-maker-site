@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -16,6 +17,8 @@ import RightSidebar from "@/components/right-sidebar"
 import MobileSidebarButton from "@/components/mobile-sidebar-button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { getAllCourses } from "@/lib/course"
+import { filterByProvinceAndCity } from "@/lib/geo"
+import type { Province } from "@/lib/constants"
 import type { Course } from "@/lib/types"
 
 const topCourses = [
@@ -42,6 +45,9 @@ export default function ExplorePage() {
   const [topCategory, setTopCategory] = useState<"travel" | "specialty" | "goods">("travel")
   const [sortOrder, setSortOrder] = useState<"latest" | "popular">("popular")
   const [loading, setLoading] = useState(true)
+  const searchParams = useSearchParams()
+  const provinceFilter = searchParams.get("province") || ""
+  const cityFilter = searchParams.get("city") || ""
 
   useEffect(() => {
     const loadCourses = async () => {
@@ -100,7 +106,11 @@ export default function ExplorePage() {
     setFilteredCourses(allCourses)
   }
 
-  const categoryFilteredCourses = filteredCourses.filter((course) => {
+  const provinceFilteredCourses = provinceFilter
+    ? filterByProvinceAndCity(filteredCourses, provinceFilter as Province, cityFilter || null)
+    : filteredCourses
+
+  const categoryFilteredCourses = provinceFilteredCourses.filter((course) => {
     const courseType = course.categoryType || "여행상품"
     if (topCategory === "travel") return courseType === "여행상품"
     if (topCategory === "specialty") return courseType === "특산품"
@@ -125,15 +135,17 @@ export default function ExplorePage() {
       return `필터 결과 (${sortedCourses.length}개)`
     }
 
+    const provincePrefix = provinceFilter ? `${provinceFilter} ` : ""
+
     if (topCategory === "specialty") {
-      return sortOrder === "latest" ? "최신 특산품" : "인기 특산품"
+      return sortOrder === "latest" ? `${provincePrefix}최신 특산품` : `${provincePrefix}인기 특산품`
     }
 
     if (topCategory === "goods") {
-      return sortOrder === "latest" ? "최신 굿즈" : "인기 굿즈"
+      return sortOrder === "latest" ? `${provincePrefix}최신 굿즈` : `${provincePrefix}인기 굿즈`
     }
 
-    return sortOrder === "latest" ? "최신 로컬 코스" : "인기 로컬 코스"
+    return sortOrder === "latest" ? `${provincePrefix}최신 로컬 코스` : `${provincePrefix}인기 로컬 코스`
   }
 
   const getPageTitle = () => {
@@ -214,7 +226,7 @@ export default function ExplorePage() {
                                 className={`
                           flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg shrink-0
                           ${course.rank === 1 ? "bg-gradient-to-br from-[#FF6F42] to-[#FF6F42]/70 text-white" : ""}
-                          ${course.rank === 2 ? "bg-gradient-to-br from-[#C9C9C9] to-[#C9C9C9]/70 text-white" : ""}
+                          ${course.rank === 2 ? "bg-gradient-to-br from-[#bba9fe] to-[#bba9fe]/70 text-white" : ""}
                           ${course.rank === 3 ? "bg-gradient-to-br from-[#3A9CFD] to-[#3A9CFD]/70 text-white" : ""}
                           ${course.rank > 3 ? "bg-muted text-muted-foreground" : ""}
                         `}
@@ -290,13 +302,25 @@ export default function ExplorePage() {
                   {sortedCourses.length === 0 && (
                     <div className="text-center py-12">
                       <p className="text-muted-foreground text-lg mb-2">
-                        {topCategory === "specialty" && "해당 카테고리의 특산품이 아직 없습니다."}
-                        {topCategory === "goods" && "해당 카테고리의 굿즈가 아직 없습니다."}
+                        {topCategory === "specialty" &&
+                          (provinceFilter
+                            ? `${provinceFilter}의 특산품이 아직 없습니다.`
+                            : "해당 카테고리의 특산품이 아직 없습니다.")}
+                        {topCategory === "goods" &&
+                          (provinceFilter
+                            ? `${provinceFilter}의 굿즈가 아직 없습니다.`
+                            : "해당 카테고리의 굿즈가 아직 없습니다.")}
                         {topCategory === "travel" && hasActiveFilters
                           ? "필터 조건에 맞는 여행 코스가 없습니다."
-                          : "해당 카테고리에 코스가 없습니다."}
+                          : provinceFilter
+                            ? `${provinceFilter}의 코스가 없습니다.`
+                            : "해당 카테고리에 코스가 없습니다."}
                       </p>
-                      <p className="text-sm text-muted-foreground mb-4">곧 다양한 상품들이 추가될 예정입니다</p>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        {provinceFilter
+                          ? "다른 지역을 선택하거나 필터를 조정하세요"
+                          : "곧 다양한 상품들이 추가될 예정입니다"}
+                      </p>
                       {hasActiveFilters && (
                         <Button onClick={handleResetFilters} className="mt-4">
                           필터 초기화

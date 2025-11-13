@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { PROVINCES, CITIES_BY_PROVINCE } from "@/lib/constants"
 
 interface FilterBarProps {
   isOpen: boolean
@@ -27,18 +28,6 @@ export interface FilterValues {
     end: string
   }
   difficulty: string
-}
-
-const provinceCityMap: Record<string, string[]> = {
-  전체: ["전체"],
-  강원도: ["전체", "춘천", "원주", "강릉", "동해", "태백", "속초", "삼척"],
-  경상북도: ["전체", "포항", "경주", "김천", "안동", "구미", "영주", "영천", "상주", "문경", "경산"],
-  경상남도: ["전체", "창원", "진주", "통영", "사천", "김해", "밀양", "거제", "양산"],
-  전라북도: ["전체", "전주", "군산", "익산", "정읍", "남원", "김제"],
-  전라남도: ["전체", "목포", "여수", "순천", "나주", "광양", "보성"],
-  충청북도: ["전체", "청주", "충주", "제천", "당진"],
-  충청남도: ["전체", "천안", "공주", "보령", "아산", "서산", "논산", "계룡", "당진", "부여"],
-  제주도: ["전체", "제주시", "서귀포"],
 }
 
 const categories = ["전체", "로컬", "카페", "맛집", "자연", "문화", "역사"]
@@ -65,7 +54,7 @@ export default function FilterBar({ isOpen, onClose, onApplyFilters, onResetFilt
     setFilters({ ...filters, province: value, city: "전체" })
   }
 
-  const availableCities = provinceCityMap[filters.province] || ["전체"]
+  const availableCities = filters.province === "전체" ? ["전체"] : CITIES_BY_PROVINCE[filters.province] || ["전체"]
 
   const handleApply = () => {
     onApplyFilters(filters)
@@ -124,7 +113,8 @@ export default function FilterBar({ isOpen, onClose, onApplyFilters, onResetFilt
                   <SelectValue placeholder="도 선택" />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.keys(provinceCityMap).map((province) => (
+                  <SelectItem value="전체">전체</SelectItem>
+                  {PROVINCES.map((province) => (
                     <SelectItem key={province} value={province}>
                       {province}
                     </SelectItem>

@@ -29,6 +29,7 @@ export type Course = {
   id: number
   title: string
   region: string
+  province?: "경기도" | "경상도" | "전라도" | "충청도" | "강원도" | "제주도"
   category: string
   categoryType?: "여행상품" | "특산품" | "굿즈"
   description: string

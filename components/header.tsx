@@ -54,24 +54,37 @@ export default function Header({ onSearch }: HeaderProps) {
     setMobileMenuOpen(!mobileMenuOpen)
   }
 
-  const hasAnyCourses = allCourses.length > 0
+  const travelCourses = allCourses.filter((course) => course.categoryType === "여행상품")
+  const hasAnyTravelCourses = travelCourses.length > 0
 
   const handleRandomCourse = () => {
-    if (!hasAnyCourses) return
-    const randomCourse = allCourses[Math.floor(Math.random() * allCourses.length)]
+    if (!hasAnyTravelCourses) return
+    const randomCourse = travelCourses[Math.floor(Math.random() * travelCourses.length)]
     router.push(`/course/${randomCourse.id}`)
-  }
+}
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-border soft-shadow">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl shrink-0">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6F42] to-[#3A9CFD]">
+          <Link href="/" className="flex items-center gap-3 shrink-0" aria-label="TRAVEL MAKER">
+
+            {/* 이미지 로고 */}
+            <img
+              src="/brand/title.jpg"
+              alt="TRAVEL MAKER"
+              className="h-12 w-auto"
+              loading="eager"
+              decoding="async"
+            />
+
+            {/* 텍스트 로고 (복구) */}
+            <span className="font-bold text-xl text-transparent bg-clip-text bg-gradient-to-r from-[#FF6F42] to-[#3A9CFD]">
               TRAVEL MAKER
             </span>
-          </Link>
+
+         </Link>
 
           <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-xl mx-8">
             <div className="relative w-full flex gap-2">
@@ -110,16 +123,16 @@ export default function Header({ onSearch }: HeaderProps) {
                     <button
                       type="button"
                       onClick={handleRandomCourse}
-                      disabled={!hasAnyCourses}
+                      disabled={!hasAnyTravelCourses}
                       aria-label="랜덤 상품 보기"
                       title="랜덤 상품 보기"
                       className="shrink-0 h-11 w-11 rounded-full border-2 border-muted hover:border-[#FF6F42] disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 active:scale-95 bg-white text-gray-700 hover:text-[#FF6F42] focus:outline-none focus:ring-2 focus:ring-[#3A9CFD]/30"
                     >
-                      <DiceIcon className="w-5 h-5 mx-auto" />
+                      <DiceIcon className="w-5 h-5 mx-auto transition-transform group-hover:rotate-12 group-active:rotate-45" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{hasAnyCourses ? "랜덤 상품 보기" : "상품이 없습니다"}</p>
+                    <p>{hasAnyTravelCourses ? "랜덤 상품 보기" : "상품이 없습니다"}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -183,16 +196,17 @@ export default function Header({ onSearch }: HeaderProps) {
                         <button
                           type="button"
                           onClick={handleRandomCourse}
-                          disabled={!hasAnyCourses}
+                          disabled={!hasAnyTravelCourses}
                           aria-label="랜덤 상품 보기"
                           title="랜덤 상품 보기"
-                          className="shrink-0 h-11 w-11 rounded-full border-2 border-muted hover:border-[#FF6F42] disabled:opacity-50 disabled:cursor-not-allowed transition-all bg-white text-gray-700 hover:text-[#FF6F42] focus:outline-none focus:ring-2 focus:ring-[#3A9CFD]/30"
+                          className="shrink-0 h-11 w-11 rounded-full border-2 border-muted bg-white text-gray-700 hover:border-[#FF6F42] hover:text-[#FF6F42] transition-all duration-200 hover:scale-110 active:scale-90 animate-pulse
+                          "
                         >
                           <DiceIcon className="w-5 h-5 mx-auto" />
                         </button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>{hasAnyCourses ? "랜덤 상품 보기" : "상품이 없습니다"}</p>
+                        <p>{hasAnyTravelCourses ? "랜덤 상품 보기" : "상품이 없습니다"}</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>

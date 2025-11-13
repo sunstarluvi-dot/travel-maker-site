@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo, useEffect, useRef } from "react"
+import { useSearchParams } from "next/navigation"
 import Header from "@/components/header"
 import LeftSidebar from "@/components/left-sidebar"
 import RightSidebar from "@/components/right-sidebar"
@@ -10,6 +11,8 @@ import TravelCard from "@/components/travel-card"
 import Footer from "@/components/footer"
 import { getAllCourses } from "@/lib/course"
 import type { Course } from "@/lib/types"
+import { filterByProvinceAndCity } from "@/lib/geo"
+import type { Province } from "@/lib/constants"
 
 function useKillLegacyChatbot() {
   useEffect(() => {
@@ -31,6 +34,10 @@ export default function HomePage() {
   const [searchFilter, setSearchFilter] = useState("all")
   const [wishlistIds, setWishlistIds] = useState<number[]>([])
   const [refreshTrigger, setRefreshTrigger] = useState(0)
+
+  const searchParams = useSearchParams()
+  const provinceFilter = searchParams.get("province") || ""
+  const cityFilter = searchParams.get("city") || ""
 
   useEffect(() => {
     let mounted = true
@@ -103,6 +110,10 @@ export default function HomePage() {
       return courseCategory === targetLabel.toLowerCase() || courseCategory.includes(targetLabel.toLowerCase())
     })
 
+    if (provinceFilter) {
+      result = filterByProvinceAndCity(result, provinceFilter as Province, cityFilter || null)
+    }
+
     if (searchQuery) {
       const query = searchQuery.toLowerCase().trim()
       result = result.filter((course) => {
@@ -125,7 +136,7 @@ export default function HomePage() {
     }
 
     return result
-  }, [selectedCategory, searchQuery, searchFilter, wishlistIds, refreshTrigger])
+  }, [selectedCategory, searchQuery, searchFilter, wishlistIds, refreshTrigger, provinceFilter, cityFilter])
 
   return (
     <div className="min-h-screen bg-background">
@@ -164,12 +175,18 @@ export default function HomePage() {
                 {filteredCourses.length === 0 && (
                   <div className="text-center py-16">
                     <p className="text-muted-foreground text-lg">
-                      {selectedCategory === "wishlist" ? "찜한 여행 코스가 없습니다" : "검색 결과가 없습니다"}
+                      {selectedCategory === "wishlist"
+                        ? "찜한 여행 코스가 없습니다"
+                        : provinceFilter
+                          ? `${provinceFilter}${cityFilter && cityFilter !== "전체" ? ` ${cityFilter}` : ""}의 검색 결과가 없습니다`
+                          : "검색 결과가 없습니다"}
                     </p>
                     <p className="text-sm text-muted-foreground mt-2">
                       {selectedCategory === "wishlist"
                         ? "마음에 드는 여행 코스를 찜해보세요"
-                        : "다른 키워드로 검색해보세요"}
+                        : provinceFilter
+                          ? "다른 지역을 선택하거나 필터를 조정하세요"
+                          : "다른 키워드로 검색해보세요"}
                     </p>
                   </div>
                 )}

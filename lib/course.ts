@@ -1,6 +1,7 @@
 import type { Course } from "./types"
 import { normalizeCourses } from "./normalize-course"
 import { SEED_SPECIALTY_ITEMS, SEED_GOODS_ITEMS, generateMockItems } from "./seed-data"
+import { withProvince } from "./geo"
 
 let cache: Course[] | null = null
 
@@ -27,11 +28,12 @@ export async function getAllCourses(): Promise<Course[]> {
     if (!res.ok) throw new Error("Failed to fetch courses")
     const data = await res.json()
     const normalized = normalizeCourses(data)
-    cache = mergeWithSeedData(normalized)
+    const withProvinces = mergeWithSeedData(normalized).map(withProvince)
+    cache = withProvinces
     return cache
   } catch (error) {
     console.error("Error fetching courses:", error)
-    return [...SEED_SPECIALTY_ITEMS, ...SEED_GOODS_ITEMS]
+    return [...SEED_SPECIALTY_ITEMS, ...SEED_GOODS_ITEMS].map(withProvince)
   }
 }
 

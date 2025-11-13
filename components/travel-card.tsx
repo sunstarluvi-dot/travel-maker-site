@@ -114,17 +114,21 @@ export default function TravelCard({
                     alt="Halal Certification"
                     className="w-full h-full object-contain"
                   />
-                </div>
+             </div>
               )}
+
               {officialCertified && (
                 <div className="w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center soft-shadow p-1.5">
-                  <img
-                    src="/images/official_cert_icon.jpg"
-                    alt="Official Certification"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
+                 <img
+                   src="/brand/logo.jpg"
+                   alt="공식 인증"
+                   className="w-full h-full object-contain"
+                   loading="lazy"
+                   decoding="async"
+                 />
+               </div>
               )}
+
               {petFriendly && (
                 <div className="w-9 h-9 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center soft-shadow">
                   <PawPrint className="w-4 h-4 text-[#FF6F42]" />
